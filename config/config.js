@@ -1,3 +1,5 @@
+require('dotenv').config(); 
+
 module.exports = {
-    db: "mongodb+srv://examadmin:MySecretPassword@cluster0.7yu7ckk.mongodb.net/COMP3033"
+    db: process.env.MONGO_URI
 };
