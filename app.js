@@ -30,10 +30,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Mount routers AFTER creating app
+// Mount routers after creating app
 app.use('/restaurants', restaurantRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+// Swagger/OpenAPI setup
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const swaggerDocument = YAML.load('./openapi.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+console.log('SwaggerUI available at http://localhost:3000/api-docs');
 
 // Catch 404
 app.use(function(req, res, next) {

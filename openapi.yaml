@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: COMP 3033 Final Exam - Restaurant API
+  version: 1.0.0
+  description: The final exam for COMP3033, implementing an API for managing restaurants.
+
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+paths:
+  /restaurants:
+    get:
+      summary: List all restaurants
+      description: Retrieves restaurants with pagination (10 per page)
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number (defaults to 1)
+      responses:
+        '200':
+          description: A paginated list of restaurants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  totalItems:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Restaurant'
+    post:
+      summary: Create a new restaurant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+      responses:
+        '201':
+          description: Restaurant created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+
+  /restaurants/{_id}:
+    delete:
+      summary: Delete a restaurant by ID
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Restaurant deleted successfully
+        '404':
+          description: Restaurant not found
+
+components:
+  schemas:
+    Restaurant:
+      type: object
+      required:
+        - name
+        - address
+        - phoneNumber
+        - emailAddress
+        - rating
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        phoneNumber:
+          type: string
+        emailAddress:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 10
